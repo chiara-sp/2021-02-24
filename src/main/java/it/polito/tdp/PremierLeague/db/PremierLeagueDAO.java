@@ -177,5 +177,31 @@ public class PremierLeagueDAO {
 		}
 		
 	}
+	public int getSquadraGiocatoreMigliore(Player player) {
+		String sql="select distinct `TeamID` "
+				+ "from actions "
+				+ "where `PlayerID`=?";
+		int result=0;
+		Connection conn = DBConnect.getConnection();
+
+		try {
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, player.getPlayerID());
+			ResultSet res = st.executeQuery();
+			if (res.next()) {
+
+				
+			result= res.getInt("TeamID");
+
+			}
+			conn.close();
+			return result;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+	}
 	
 }

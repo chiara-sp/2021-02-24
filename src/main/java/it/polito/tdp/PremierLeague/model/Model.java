@@ -17,6 +17,7 @@ public class Model {
 	PremierLeagueDAO dao;
 	private Graph<Player,DefaultWeightedEdge> grafo;
 	private Map<Integer,Player> idMap;
+	private Simulatore sim;
 	
 	public Model() {
 		this.dao= new PremierLeagueDAO();
@@ -67,7 +68,7 @@ public class Model {
 			for (DefaultWeightedEdge edge: this.grafo.incomingEdgesOf(p))
 				pesoEntrante+= this.grafo.getEdgeWeight(edge);
 			
-			double delta = Math.abs(pesoUscente - pesoEntrante);
+			double delta = pesoUscente - pesoEntrante;
 			if(delta>maxDelta) {
 				best=p;
 				maxDelta=delta;
@@ -79,5 +80,19 @@ public class Model {
 		if(grafo==null)
 			return false;
 		return true;
+	}
+	public int getSquadraGiocatoreMigliore(Player p) {
+		return dao.getSquadraGiocatoreMigliore(p);
+	}
+	public void simula(Match m, int n) {
+		sim= new Simulatore(grafo, this);
+		sim.init(m, n);
+		sim.run();
+	}
+	public String risultato() {
+		return sim.risultato();
+	}
+	public String espulsioni() {
+		return sim.espulsioni();
 	}
 }
